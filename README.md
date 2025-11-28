@@ -140,15 +140,7 @@ ARGUS expects longitudinal EHR data in the following format:
 - **Tumor Markers**: CEA, AFP, CA19-9, CA125, PSA, etc.
 - **Vital Signs**: Heart rate, Blood pressure, Temperature
 
-See [Data Format Documentation](docs/data_format.md) for detailed specifications.
 
-## Model Configurations
-
-| Config | d_model | Layers | Heads | Parameters |
-|--------|---------|--------|-------|------------|
-| `argus_small` | 128 | 4 | 4 | ~2M |
-| `argus_base` | 256 | 6 | 8 | ~8M |
-| `argus_large` | 512 | 12 | 16 | ~32M |
 
 ## Project Structure
 
@@ -187,8 +179,6 @@ cd ARGUS
 # Install dependencies
 pip install -e ".[all]"
 
-# Download preprocessed data (if available)
-# Data access requires institutional approval
 
 # Train model
 python scripts/train.py model=argus_base
@@ -203,10 +193,6 @@ python scripts/visualize.py
 
 ## Acknowledgments
 
-This work was supported by grants from:
-- National Natural Science Foundation of China
-- National Key Research and Development Program of China
-- Shanghai Shenkang Hospital Development Center
 
 We thank all participants of the VTP (Virtual Tumor Project) consortium and the clinical staff at participating institutions.
 
