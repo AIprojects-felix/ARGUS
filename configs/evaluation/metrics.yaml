@@ -1,0 +1,154 @@
+# =============================================================================
+# ARGUS Evaluation Metrics Configuration
+# =============================================================================
+
+evaluation:
+  # ---------------------------------------------------------------------------
+  # Classification Metrics
+  # ---------------------------------------------------------------------------
+  classification:
+    # Primary metrics
+    primary:
+      - name: "auroc"
+        full_name: "Area Under ROC Curve"
+        average: "macro"  # macro, micro, weighted, samples
+
+      - name: "auprc"
+        full_name: "Area Under Precision-Recall Curve"
+        average: "macro"
+
+    # Secondary metrics
+    secondary:
+      - name: "accuracy"
+        threshold: 0.5
+
+      - name: "precision"
+        average: "macro"
+
+      - name: "recall"
+        average: "macro"
+
+      - name: "f1"
+        average: "macro"
+
+      - name: "specificity"
+        average: "macro"
+
+      - name: "sensitivity"
+        average: "macro"
+
+    # Per-target metrics
+    per_target: true
+
+  # ---------------------------------------------------------------------------
+  # Threshold Optimization
+  # ---------------------------------------------------------------------------
+  threshold:
+    method: "youden"  # youden, f1, precision_at_recall, recall_at_precision
+    # For precision_at_recall:
+    target_recall: 0.9
+    # For recall_at_precision:
+    target_precision: 0.9
+
+  # ---------------------------------------------------------------------------
+  # Calibration Metrics
+  # ---------------------------------------------------------------------------
+  calibration:
+    enabled: true
+    metrics:
+      - name: "ece"
+        full_name: "Expected Calibration Error"
+        n_bins: 10
+
+      - name: "mce"
+        full_name: "Maximum Calibration Error"
+        n_bins: 10
+
+      - name: "brier_score"
+        full_name: "Brier Score"
+
+    reliability_diagram:
+      enabled: true
+      n_bins: 10
+
+  # ---------------------------------------------------------------------------
+  # Statistical Confidence
+  # ---------------------------------------------------------------------------
+  bootstrap:
+    enabled: true
+    n_iterations: 1000
+    confidence_level: 0.95
+    random_state: 42
+    stratified: true
+
+  # ---------------------------------------------------------------------------
+  # Clinical Utility Metrics
+  # ---------------------------------------------------------------------------
+  clinical:
+    enabled: true
+    metrics:
+      - name: "ppv"
+        full_name: "Positive Predictive Value"
+
+      - name: "npv"
+        full_name: "Negative Predictive Value"
+
+      - name: "dca"
+        full_name: "Decision Curve Analysis"
+        threshold_range: [0.01, 0.99]
+
+    # Net benefit at clinical thresholds
+    decision_thresholds:
+      - 0.1
+      - 0.2
+      - 0.3
+      - 0.5
+
+  # ---------------------------------------------------------------------------
+  # Survival Analysis
+  # ---------------------------------------------------------------------------
+  survival:
+    enabled: true
+    methods:
+      - name: "kaplan_meier"
+        time_points: [12, 24, 36, 60]  # months
+
+      - name: "cox_regression"
+        covariates: []  # Additional covariates for adjustment
+
+      - name: "log_rank"
+
+    # Risk stratification
+    stratification:
+      n_groups: 3  # Low, Standard, High
+      method: "quantile"  # quantile, threshold
+
+    # Hazard ratio reporting
+    hazard_ratio:
+      confidence_level: 0.95
+      reference_group: "low"
+
+  # ---------------------------------------------------------------------------
+  # Subgroup Analysis
+  # ---------------------------------------------------------------------------
+  subgroup:
+    enabled: true
+    by:
+      - "cancer_type"
+      - "stage"
+      - "age_group"
+      - "sex"
+
+  # ---------------------------------------------------------------------------
+  # Output Configuration
+  # ---------------------------------------------------------------------------
+  output:
+    format: "json"  # json, csv, html
+    save_predictions: true
+    save_embeddings: true
+    plots:
+      roc_curves: true
+      pr_curves: true
+      confusion_matrix: true
+      calibration_plot: true
+      survival_curves: true

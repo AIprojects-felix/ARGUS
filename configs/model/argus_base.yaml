@@ -1,0 +1,90 @@
+# =============================================================================
+# ARGUS Base Model Configuration
+# =============================================================================
+# Dual-encoder architecture with Temporal Transformer
+# Parameters: ~8M
+
+model:
+  name: "argus_base"
+  _target_: argus.models.ARGUS
+
+  # ---------------------------------------------------------------------------
+  # Static Encoder Configuration
+  # ---------------------------------------------------------------------------
+  # MLP-based encoder for demographic and categorical features
+  static_encoder:
+    input_dim: 18  # age (1) + sex (1) + cancer_type (16)
+    hidden_dims: [128, 256]
+    dropout: 0.1
+    activation: "gelu"
+    batch_norm: true
+    layer_norm: false
+
+  # ---------------------------------------------------------------------------
+  # Temporal Transformer Encoder Configuration
+  # ---------------------------------------------------------------------------
+  # Transformer-based encoder for longitudinal EHR data
+  temporal_encoder:
+    input_dim: 180  # Number of clinical variables
+    d_model: 256  # Model embedding dimension
+    n_heads: 8  # Number of attention heads
+    n_layers: 6  # Number of transformer layers
+    d_ff: 1024  # Feed-forward network dimension (4 * d_model)
+    dropout: 0.1
+    attention_dropout: 0.1
+    activation: "gelu"
+    max_seq_len: 365  # Maximum sequence length (days)
+    use_cls_token: true  # Use [CLS] token for pooling
+    use_mask_token: true  # Use learnable mask for missing values
+    position_encoding: "sinusoidal"  # sinusoidal, learnable, time_aware
+    norm_first: true  # Pre-LN Transformer
+
+  # ---------------------------------------------------------------------------
+  # Feature Fusion Configuration
+  # ---------------------------------------------------------------------------
+  fusion:
+    method: "concat"  # concat, cross_attention, gated, bilinear
+    # For cross_attention fusion:
+    # n_heads: 4
+    # n_layers: 2
+
+  # ---------------------------------------------------------------------------
+  # Prediction Head Configuration
+  # ---------------------------------------------------------------------------
+  prediction_head:
+    hidden_dims: [512, 256]
+    dropout: 0.2
+    activation: "gelu"
+    batch_norm: false
+    layer_norm: true
+
+  # ---------------------------------------------------------------------------
+  # Output Configuration
+  # ---------------------------------------------------------------------------
+  # Number of prediction targets
+  n_targets: 43  # 40+ driver genes + TMB + MSI + PD-L1 levels
+
+  # Target groups for multi-task learning
+  target_groups:
+    driver_genes:
+      indices: [0, 39]  # Indices 0-39
+      weight: 1.0
+    biomarkers:
+      indices: [40, 42]  # TMB, MSI, PD-L1
+      weight: 1.5  # Higher weight for clinical biomarkers
+
+# =============================================================================
+# Initialization
+# =============================================================================
+
+initialization:
+  method: "xavier_uniform"  # xavier_uniform, xavier_normal, kaiming_uniform, kaiming_normal
+  gain: 1.0
+  # For specific layers:
+  embedding:
+    method: "normal"
+    std: 0.02
+  attention:
+    method: "xavier_uniform"
+  output:
+    method: "xavier_uniform"

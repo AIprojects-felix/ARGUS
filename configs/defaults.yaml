@@ -1,0 +1,63 @@
+# =============================================================================
+# ARGUS: AI-based Routine Genomic Understanding System
+# Default Configuration
+# =============================================================================
+# This is the root configuration file that imports all other configs
+
+defaults:
+  - model: argus_base
+  - data: preprocessing
+  - training: default
+  - evaluation: metrics
+  - _self_
+
+# =============================================================================
+# Global Settings
+# =============================================================================
+
+# Random seed for reproducibility
+seed: 42
+
+# Device configuration
+device: "cuda"  # cuda, cpu, mps
+precision: 16  # 16, 32, bf16
+
+# Paths
+paths:
+  data_dir: "data/"
+  output_dir: "experiments/outputs/"
+  checkpoint_dir: "experiments/checkpoints/"
+  log_dir: "experiments/logs/"
+
+# =============================================================================
+# Experiment Tracking
+# =============================================================================
+
+experiment:
+  name: "argus_experiment"
+  project: "ARGUS"
+  tags: []
+  notes: ""
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  console: true
+  file: true
+  tensorboard: true
+  mlflow: false
+  wandb: false
+
+# =============================================================================
+# Hydra Configuration
+# =============================================================================
+
+hydra:
+  run:
+    dir: ${paths.output_dir}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ${paths.output_dir}/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false
+  verbose: false

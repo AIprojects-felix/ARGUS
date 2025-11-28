@@ -1,0 +1,131 @@
+# =============================================================================
+# ARGUS Training Configuration
+# =============================================================================
+
+training:
+  # ---------------------------------------------------------------------------
+  # Optimization
+  # ---------------------------------------------------------------------------
+  optimizer:
+    name: "adamw"
+    lr: 1.0e-4
+    weight_decay: 1.0e-4
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    amsgrad: false
+
+  # Learning Rate Scheduler
+  scheduler:
+    name: "cosine_annealing_warmup"
+    warmup_steps: 1000
+    warmup_start_lr: 1.0e-7
+    min_lr: 1.0e-6
+    # For CosineAnnealingLR:
+    T_max: null  # Set to total steps if not using warmup
+    # For OneCycleLR:
+    max_lr: 1.0e-3
+    pct_start: 0.1
+
+  # ---------------------------------------------------------------------------
+  # Training Loop
+  # ---------------------------------------------------------------------------
+  epochs: 100
+  batch_size: 64
+  gradient_clip:
+    enabled: true
+    max_norm: 1.0
+    norm_type: 2
+  accumulation_steps: 1
+
+  # ---------------------------------------------------------------------------
+  # Mixed Precision Training
+  # ---------------------------------------------------------------------------
+  amp:
+    enabled: true
+    dtype: "float16"  # float16, bfloat16
+    scaler:
+      enabled: true
+      init_scale: 65536.0
+      growth_factor: 2.0
+      backoff_factor: 0.5
+      growth_interval: 2000
+
+  # ---------------------------------------------------------------------------
+  # Regularization
+  # ---------------------------------------------------------------------------
+  regularization:
+    dropout: 0.1
+    label_smoothing: 0.0
+    weight_decay: 1.0e-4
+
+  # ---------------------------------------------------------------------------
+  # Loss Function
+  # ---------------------------------------------------------------------------
+  loss:
+    name: "bce"  # bce, focal, weighted_bce
+    reduction: "mean"
+    # For Focal Loss:
+    focal:
+      alpha: 0.25
+      gamma: 2.0
+    # For Weighted BCE:
+    pos_weight: null  # Auto-compute from class distribution
+
+  # ---------------------------------------------------------------------------
+  # Early Stopping
+  # ---------------------------------------------------------------------------
+  early_stopping:
+    enabled: true
+    patience: 10
+    metric: "val_auroc"
+    mode: "max"  # max, min
+    min_delta: 0.001
+    check_finite: true
+
+  # ---------------------------------------------------------------------------
+  # Model Checkpointing
+  # ---------------------------------------------------------------------------
+  checkpoint:
+    enabled: true
+    save_top_k: 3
+    metric: "val_auroc"
+    mode: "max"
+    save_last: true
+    every_n_epochs: 1
+    filename: "epoch={epoch:02d}-val_auroc={val_auroc:.4f}"
+
+  # ---------------------------------------------------------------------------
+  # Logging
+  # ---------------------------------------------------------------------------
+  logging:
+    log_every_n_steps: 50
+    val_check_interval: 1.0  # Check every epoch
+    progress_bar: true
+
+  # ---------------------------------------------------------------------------
+  # Distributed Training
+  # ---------------------------------------------------------------------------
+  distributed:
+    strategy: "auto"  # auto, ddp, ddp_spawn, deepspeed, fsdp
+    devices: "auto"  # auto, 1, 2, [0,1], etc.
+    accelerator: "auto"  # auto, cpu, gpu, tpu
+    sync_batchnorm: true
+    find_unused_parameters: false
+
+# =============================================================================
+# Trainer Configuration (PyTorch Lightning)
+# =============================================================================
+
+trainer:
+  max_epochs: ${training.epochs}
+  accelerator: ${training.distributed.accelerator}
+  devices: ${training.distributed.devices}
+  strategy: ${training.distributed.strategy}
+  precision: ${precision}
+  gradient_clip_val: ${training.gradient_clip.max_norm}
+  accumulate_grad_batches: ${training.accumulation_steps}
+  log_every_n_steps: ${training.logging.log_every_n_steps}
+  val_check_interval: ${training.logging.val_check_interval}
+  enable_progress_bar: ${training.logging.progress_bar}
+  deterministic: false
+  benchmark: true

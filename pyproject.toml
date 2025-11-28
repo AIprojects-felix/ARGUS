@@ -1,0 +1,244 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "argus-genomics"
+version = "1.0.0"
+description = "ARGUS: AI-based Routine Genomic Understanding System - A pan-cancer deep learning framework for non-invasive genomic profiling from longitudinal EHR data"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "VTP Consortium", email = "liufei_2359@163.com"},
+]
+maintainers = [
+    {name = "Fei Liu", email = "liufei_2359@163.com"},
+    {name = "Shancheng Ren", email = "renshancheng@gmail.com"},
+]
+keywords = [
+    "deep-learning",
+    "genomics",
+    "cancer",
+    "precision-medicine",
+    "electronic-health-records",
+    "transformer",
+    "multi-omics",
+    "biomarker-prediction",
+    "clinical-ai",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "torch>=2.0.0",
+    "pytorch-lightning>=2.0.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.2.0",
+    "shap>=0.42.0",
+    "umap-learn>=0.5.3",
+    "leidenalg>=0.9.0",
+    "igraph>=0.10.0",
+    "lifelines>=0.27.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "plotly>=5.14.0",
+    "hydra-core>=1.3.0",
+    "omegaconf>=2.3.0",
+    "tensorboard>=2.12.0",
+    "rich>=13.0.0",
+    "tqdm>=4.65.0",
+    "pyyaml>=6.0",
+    "einops>=0.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.2.0",
+    "mypy>=1.2.0",
+    "black>=23.3.0",
+    "ruff>=0.0.260",
+    "isort>=5.12.0",
+    "pre-commit>=3.2.0",
+    "ipython>=8.12.0",
+]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.1.0",
+    "mkdocstrings[python]>=0.20.0",
+    "mkdocs-gen-files>=0.4.0",
+    "mkdocs-literate-nav>=0.6.0",
+]
+experiment = [
+    "mlflow>=2.3.0",
+    "wandb>=0.15.0",
+    "optuna>=3.1.0",
+]
+all = [
+    "argus-genomics[dev,docs,experiment]",
+]
+
+[project.urls]
+Homepage = "https://github.com/AIprojects-felix/ARGUS"
+Documentation = "https://github.com/AIprojects-felix/ARGUS#readme"
+Repository = "https://github.com/AIprojects-felix/ARGUS.git"
+Issues = "https://github.com/AIprojects-felix/ARGUS/issues"
+Changelog = "https://github.com/AIprojects-felix/ARGUS/blob/main/CHANGELOG.md"
+
+[project.scripts]
+argus-train = "scripts.train:main"
+argus-evaluate = "scripts.evaluate:main"
+argus-predict = "scripts.predict:main"
+argus-interpret = "scripts.interpret:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["argus*", "configs*", "scripts*"]
+exclude = ["tests*", "docs*", "notebooks*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml", "*.json"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | experiments
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "D",   # pydocstyle
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "D100",  # missing docstring in public module
+    "D104",  # missing docstring in public package
+    "D107",  # missing docstring in __init__
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.ruff.isort]
+known-first-party = ["argus"]
+force-single-line = false
+lines-between-types = 1
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+namespace_packages = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = [
+    "torch.*",
+    "pytorch_lightning.*",
+    "numpy.*",
+    "pandas.*",
+    "scipy.*",
+    "sklearn.*",
+    "shap.*",
+    "umap.*",
+    "leidenalg.*",
+    "igraph.*",
+    "lifelines.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "plotly.*",
+    "hydra.*",
+    "omegaconf.*",
+    "tensorboard.*",
+    "mlflow.*",
+    "wandb.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "-q",
+    "--strict-markers",
+    "--strict-config",
+    "-p no:warnings",
+]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "gpu: marks tests that require GPU",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
+
+[tool.coverage.run]
+source = ["argus"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "@abstractmethod",
+]
+show_missing = true
+precision = 2

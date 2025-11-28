@@ -1,0 +1,61 @@
+# =============================================================================
+# ARGUS Large Model Configuration
+# =============================================================================
+# High-capacity variant for maximum performance
+# Parameters: ~32M
+
+model:
+  name: "argus_large"
+  _target_: argus.models.ARGUS
+
+  # Static Encoder
+  static_encoder:
+    input_dim: 18
+    hidden_dims: [256, 512]
+    dropout: 0.1
+    activation: "gelu"
+    batch_norm: true
+    layer_norm: false
+
+  # Temporal Transformer Encoder
+  temporal_encoder:
+    input_dim: 180
+    d_model: 512
+    n_heads: 16
+    n_layers: 12
+    d_ff: 2048
+    dropout: 0.1
+    attention_dropout: 0.1
+    activation: "gelu"
+    max_seq_len: 365
+    use_cls_token: true
+    use_mask_token: true
+    position_encoding: "sinusoidal"
+    norm_first: true
+
+  # Feature Fusion
+  fusion:
+    method: "concat"
+
+  # Prediction Head
+  prediction_head:
+    hidden_dims: [1024, 512, 256]
+    dropout: 0.2
+    activation: "gelu"
+    batch_norm: false
+    layer_norm: true
+
+  # Output
+  n_targets: 43
+
+  target_groups:
+    driver_genes:
+      indices: [0, 39]
+      weight: 1.0
+    biomarkers:
+      indices: [40, 42]
+      weight: 1.5
+
+initialization:
+  method: "xavier_uniform"
+  gain: 1.0
