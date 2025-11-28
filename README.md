@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/logo.png" alt="ARGUS Logo" width="200"/>
-</p>
-
 <h1 align="center">ARGUS</h1>
 
 <p align="center">
@@ -12,14 +8,6 @@
   A Pan-Cancer Deep Learning Framework for Non-Invasive Genomic Profiling from Longitudinal Electronic Health Records
 </p>
 
-<p align="center">
-  <a href="https://github.com/AIprojects-felix/ARGUS/actions"><img src="https://github.com/AIprojects-felix/ARGUS/workflows/CI/badge.svg" alt="CI Status"></a>
-  <a href="https://codecov.io/gh/AIprojects-felix/ARGUS"><img src="https://codecov.io/gh/AIprojects-felix/ARGUS/branch/main/graph/badge.svg" alt="codecov"></a>
-  <a href="https://pypi.org/project/argus-genomics/"><img src="https://img.shields.io/pypi/v/argus-genomics.svg" alt="PyPI"></a>
-  <a href="https://pypi.org/project/argus-genomics/"><img src="https://img.shields.io/pypi/pyversions/argus-genomics.svg" alt="Python Version"></a>
-  <a href="https://github.com/AIprojects-felix/ARGUS/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
-  <a href="https://arxiv.org/abs/xxxx.xxxxx"><img src="https://img.shields.io/badge/arXiv-xxxx.xxxxx-b31b1b.svg" alt="arXiv"></a>
-</p>
 
 ---
 
