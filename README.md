@@ -162,9 +162,7 @@ ARGUS/
 │   └── utils/                # Utilities
 ├── configs/                  # Hydra configurations
 ├── scripts/                  # Training/evaluation scripts
-├── notebooks/                # Jupyter notebooks
-├── docs/                     # Documentation
-└── docker/                   # Docker configurations
+
 ```
 
 ## Reproducibility
