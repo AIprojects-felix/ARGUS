@@ -23,14 +23,6 @@
 - **Model Interpretability**: SHAP-based feature attribution and phenotype-genotype mapping
 - **Pan-Cancer Applicability**: Unified framework across 16 cancer types
 
-### Performance Highlights
-
-| Metric | Value |
-|--------|-------|
-| Mean AUROC (40+ driver genes) | 0.843 (0.718–0.951) |
-| PD-L1 prediction accuracy | 85.4% |
-| EGFR mutation AUROC (NSCLC) | 0.929 |
-| Immunotherapy stratification HR | 2.13 (P < 0.01) |
 
 ## Architecture
 
@@ -179,7 +171,6 @@ ARGUS/
 ├── configs/                  # Hydra configurations
 ├── scripts/                  # Training/evaluation scripts
 ├── notebooks/                # Jupyter notebooks
-├── tests/                    # Unit and integration tests
 ├── docs/                     # Documentation
 └── docker/                   # Docker configurations
 ```
@@ -209,33 +200,6 @@ python scripts/evaluate.py
 python scripts/visualize.py
 ```
 
-## Citation
-
-If you use ARGUS in your research, please cite our paper:
-
-```bibtex
-@article{wu2025argus,
-  title={A Pan-Cancer AI Framework for Non-Invasive Genomic Profiling},
-  author={Wu, Liyuan and Yin, Hubin and Chen, Rui and Han, Sujun and others},
-  journal={Nature Medicine},
-  year={2025},
-  publisher={Nature Publishing Group}
-}
-```
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
@@ -246,10 +210,6 @@ This work was supported by grants from:
 
 We thank all participants of the VTP (Virtual Tumor Project) consortium and the clinical staff at participating institutions.
 
-## Contact
-
-- **Lead Contact**: Fei Liu (liufei_2359@163.com)
-- **Correspondence**: Shancheng Ren (renshancheng@gmail.com)
 
 For questions about the code, please open an [Issue](https://github.com/AIprojects-felix/ARGUS/issues).
 
